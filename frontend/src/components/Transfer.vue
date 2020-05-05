@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     getImages() {
-      GetStyleImage().then(resp => {
+      GetStyleImage({'image_type': 'trained'}).then(resp => {
         if (resp.err === null) {
           this.styleImages = resp.data;
         }
@@ -100,7 +100,7 @@ export default {
       let headers = {
         headers: { "Content-Type": "multipart/form-data" }
       };
-      ajax.post("/api/UploadOriginImageAPI", param, headers).then(resp => {
+      ajax.post("/api/UploadImageAPI", param, headers).then(resp => {
         if (resp.data.err === null) {
           loading.close();
           this.originImagePath = resp.data.data.origin_image_path;

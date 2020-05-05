@@ -32,7 +32,7 @@ class Servicer(style_migrate_pb2_grpc.StyleMigrateServicer):
         start_time = time.time()
         logger.info('convert image start')
         print(weight)
-        generate_image = original_to_style(image_path=os.path.join(settings.ORIGINAL_IMAGE_PATH, origin_image),
+        generate_image = original_to_style(image_path=os.path.join(settings.UPLOAD_IMAGE_PATH, origin_image),
                                            label_weight=weight, label_nums=label_nums)
         print(generate_image)
         spend_time = time.time() - start_time

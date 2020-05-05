@@ -47,7 +47,7 @@
         },
         methods: {
             getImages() {
-                GetStyleImage().then(resp => {
+                GetStyleImage({'image_type': 'for_train'}).then(resp => {
                     if (resp.err === null) {
                         this.images = resp.data
                     }
@@ -89,7 +89,7 @@
                 })
             },
             renameImage(id) {
-                let update_name = prompt("请输入修改后的风格图片名字","178");
+                let update_name = prompt("请输入修改后的风格图片名字");
                 if (update_name === null || update_name === '') {
                     return
                 }

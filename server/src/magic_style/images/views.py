@@ -1,3 +1,4 @@
+import os
 from functools import reduce
 from operator import or_
 
@@ -7,7 +8,7 @@ from django.db.models import Q
 
 from images.models import UploadImage, GenerateImage, StyleImage
 from images.serializers import UploadFileForm, StyleImageSerializer, UpdateStyleImageSerializer, ConvertImageSerializer, \
-    TrainingModeSerializer
+    TrainingModeSerializer, GetStyleImageSerializer
 from rpc import rpc_interface
 from utils.api import APIView, check
 from utils.constants.account import UserTypeEnum
@@ -16,9 +17,10 @@ from utils.shortcuts import rand_str, save_file, delete_file
 
 
 class StyleImageAPI(APIView):
-    @check([UserTypeEnum.super_admin])
+    @check([UserTypeEnum.super_admin], serializer=GetStyleImageSerializer)
     def get(self, request):
-        style_images = StyleImage.objects.filter(image_type=StyleImageTypeEnum.trained)
+        image_type = request.data['image_type']
+        style_images = StyleImage.objects.filter(image_type=image_type)
         return self.success(StyleImageSerializer(style_images, many=True).data)
 
     @check([UserTypeEnum.super_admin], serializer=UpdateStyleImageSerializer)
@@ -42,7 +44,7 @@ class StyleImageAPI(APIView):
         except StyleImage.DoesNotExist:
             return self.error('图片不存在')
         
-        delete_file(image.now_name, path=settings.STYLE_IMAGE_PATH)
+        delete_file(image.now_name, path=settings.STYLE_IMAGE_FORTRAIN_PATH)
         image.delete()
 
         return self.success()
@@ -62,28 +64,28 @@ class UploadStyleImageAPI(APIView):
         upload_name = upload_file_name.split('.')[0]
         now_name = rand_str(length=16)
 
-        save_file(file, now_name, path=settings.STYLE_IMAGE_PATH)
+        save_file(file, now_name, path=settings.STYLE_IMAGE_FORTRAIN_PATH)
         StyleImage.objects.create(upload_name=upload_name, now_name=now_name, image_type=StyleImageTypeEnum.for_train)
         return self.success()
 
 
-class UploadOriginImageAPI(APIView):
-    request_parsers = ()
-
-    @check([UserTypeEnum.super_admin])
-    def post(self, request):
-        upload_file_form = UploadFileForm(request.POST, request.FILES)
-        if not upload_file_form.is_valid():
-            return self.error(msg='文件上传失败')
-
-        file = request.FILES['file']
-        upload_file_name = file.name
-        upload_name = upload_file_name.split('.')[0]
-        now_name = rand_str(length=16)
-
-        save_file(file, now_name, path=settings.ORIGINAL_IMAGE_PATH)
-        image = UploadImage.objects.create(upload_name=upload_name, now_name=now_name)
-        return self.success({'origin_image_path': 'original_image/' + image.now_name, 'name': image.now_name})
+# class UploadOriginImageAPI(APIView):
+#     request_parsers = ()
+#
+#     @check([UserTypeEnum.super_admin])
+#     def post(self, request):
+#         upload_file_form = UploadFileForm(request.POST, request.FILES)
+#         if not upload_file_form.is_valid():
+#             return self.error(msg='文件上传失败')
+#
+#         file = request.FILES['file']
+#         upload_file_name = file.name
+#         upload_name = upload_file_name.split('.')[0]
+#         now_name = rand_str(length=16)
+#
+#         save_file(file, now_name, path=settings.ORIGINAL_IMAGE_PATH)
+#         image = UploadImage.objects.create(upload_name=upload_name, now_name=now_name)
+#         return self.success({'origin_image_path': 'original_image/' + image.now_name, 'name': image.now_name})
 
 
 class ConvertImageAPI(APIView):
@@ -92,7 +94,7 @@ class ConvertImageAPI(APIView):
         data = request.data
         origin_image = data['origin_image']
         style_image_ids = data['style_images']
-        style_images = StyleImage.objects.filter(image_type=StyleImageTypeEnum.for_train).\
+        style_images = StyleImage.objects.filter(image_type=StyleImageTypeEnum.trained).\
             filter(reduce(or_, [Q(id=id) for id in style_image_ids])).values_list('now_name', flat=True)
         member = 1 / len(style_images)
         weight = {}
@@ -112,14 +114,24 @@ class TrainingModeAPI(APIView):
     @check([UserTypeEnum.super_admin], serializer=TrainingModeSerializer)
     def post(self, request):
         operation = request.data['operation']
-        print(operation)
+
+        for_train_images = StyleImage.objects.filter(image_type=StyleImageTypeEnum.for_train)
+        StyleImage.objects.filter(image_type=StyleImageTypeEnum.trained).delete()
+        for image in for_train_images:
+            image_name = rand_str()
+            with open(os.path.join(settings.STYLE_IMAGE_PATH, image_name), 'wb') as f:
+                with open(os.path.join(settings.STYLE_IMAGE_FORTRAIN_PATH, image.now_name), 'rb') as fp:
+                    f.write(fp.read())
+            StyleImage.objects.create(upload_name=image.upload_name, now_name=image_name,
+                                      image_type=StyleImageTypeEnum.trained)
+
         try:
             resp = rpc_interface.training_mode(operation)
         except grpc._channel._Rendezvous:
             return self.error('operation failed')
         if resp.status is not True:
             return self.error('operation failed')
-        print(resp)
+
         return self.success({'status': resp.message})
 
 
@@ -142,7 +154,7 @@ class UploadImageAPI(APIView):
         data = {
             'id': image.id,
             'name': image.upload_name,
-            'path': f'generate_image/{image.now_name}',
+            'path': f'upload_image/{image.now_name}',
             'create_time': image.create_time
         }
         return self.success(data)

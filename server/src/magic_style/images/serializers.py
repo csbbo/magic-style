@@ -2,11 +2,16 @@ from rest_framework import serializers
 from django import forms
 
 from images.models import StyleImage
+from utils.constants.images import StyleImageTypeEnum
 from utils.constants.rpc import TrainingModeTypeEnum
 
 
 class UploadFileForm(forms.Form):
     file = forms.FileField()
+
+
+class GetStyleImageSerializer(serializers.ModelSerializer):
+    image_type = serializers.ChoiceField(choices=StyleImageTypeEnum.choices())
 
 
 class StyleImageSerializer(serializers.ModelSerializer):

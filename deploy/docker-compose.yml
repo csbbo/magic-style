@@ -22,11 +22,11 @@ services:
       - postgres
     volumes:
       - "./log/server:/web/log"
-      - "./images/style_image:/dev/resources/style_image"
-      - "./images/style_image_ready:/dev/resources/style_image_ready"
-      - "./images/original_image:/dev/resources/original_image"
-      - "./images/generate_image:/dev/resources/generate_image"
-      - "./images/other_image:/dev/resources/other_image"
+      - "./images/style_image:/dev/resources/images/style_image"
+      - "./images/style_image_fortrain:/dev/resources/images/style_image_fortrain"
+      - "./images/upload:/dev/resources/images/upload_image"
+      - "./images/generate_image:/dev/resources/images/generate_image"
+      - "./images/other_image:/dev/resources/images/other_image"
       - "./download:/dev/resources/download"
     healthcheck:
       test: "curl -fs http://127.0.0.1:8000/api/CSRFTokenAPI || exit 1"
@@ -44,10 +44,10 @@ services:
       - server
     volumes:
       - "./log/openresty:/web/nginx/logs"
-      - "./images/style_image:/dev/resources/style_image"
-      - "./images/style_image_ready:/dev/resources/style_image_ready"
-      - "./images/original_image:/dev/resources/original_image"
-      - "./images/generate_image:/dev/resources/generate_image"
+      - "./images/style_image:/dev/resources/images/style_image"
+      - "./images/style_image_fortrain:/dev/resources/images/style_image_fortrain"
+      - "./images/upload:/dev/resources/images/upload_image"
+      - "./images/generate_image:/dev/resources/images/generate_image"
       - "./other_image:/dev/resources/other_image"
   style_migrate:
     image: ms_style_migrate:latest
@@ -56,9 +56,9 @@ services:
     # ports:
     #  - 1600:1600
     volumes:
-      - "./images/style_image:/dev/resources/style_image"
-      - "./images/original_image:/dev/resources/original_image"
-      - "./images/generate_image:/dev/resources/generate_image"
+      - "./images/style_image:/dev/resources/images/style_image"
+      - "./images/original_image:/dev/resources/images/upload_image"
+      - "./images/generate_image:/dev/resources/images/generate_image"
       - "./model:/dev/resources/model"
       - "./data:/dev/resources/data"
       - "./migrate/vggnet:/dev/resources/vggnet"
