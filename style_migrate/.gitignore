@@ -1,0 +1,7 @@
+src/core/data
+src/core/generate_image
+src/core/model
+src/core/original_image
+src/core/style_image
+src/core/vggnet
+src/core/MSCOCO

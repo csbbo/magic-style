@@ -1,0 +1,11 @@
+Dockerfile
+docker-compose.yml
+*.md
+.idea
+.git
+**/.DS_Store
+**/*.pyc
+**/.vscode
+**/.idea
+**/__pycache__
+**/.proto
