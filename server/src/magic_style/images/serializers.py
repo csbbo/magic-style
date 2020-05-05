@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django import forms
 
-from images.models import Image
+from images.models import StyleImage
 from utils.constants.rpc import TrainingModeTypeEnum
 
 
@@ -17,7 +17,7 @@ class StyleImageSerializer(serializers.ModelSerializer):
         return now_name
 
     class Meta:
-        model = Image
+        model = StyleImage
         fields = ('id', 'upload_name', 'now_name', 'image_type', 'create_time')
 
 

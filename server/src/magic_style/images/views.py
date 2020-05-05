@@ -5,20 +5,20 @@ import grpc
 from django.conf import settings
 from django.db.models import Q
 
-from images.models import Image, UploadImage, GenerateImage
+from images.models import UploadImage, GenerateImage, StyleImage
 from images.serializers import UploadFileForm, StyleImageSerializer, UpdateStyleImageSerializer, ConvertImageSerializer, \
     TrainingModeSerializer
 from rpc import rpc_interface
 from utils.api import APIView, check
 from utils.constants.account import UserTypeEnum
-from utils.constants.images import ImageTypeEnum
+from utils.constants.images import StyleImageTypeEnum
 from utils.shortcuts import rand_str, save_file, delete_file
 
 
 class StyleImageAPI(APIView):
     @check([UserTypeEnum.super_admin])
     def get(self, request):
-        style_images = Image.objects.filter(image_type=ImageTypeEnum.style_image)
+        style_images = StyleImage.objects.filter(image_type=StyleImageTypeEnum.trained)
         return self.success(StyleImageSerializer(style_images, many=True).data)
 
     @check([UserTypeEnum.super_admin], serializer=UpdateStyleImageSerializer)
@@ -27,10 +27,10 @@ class StyleImageAPI(APIView):
         image_id = data['id']
         update_name = data['update_name']
         try:
-            image = Image.objects.get(id=image_id)
+            image = StyleImage.objects.get(id=image_id)
             image.upload_name = update_name
             image.save()
-        except Image.DoesNotExist:
+        except StyleImage.DoesNotExist:
             return self.error('图片不存在')
         return self.success()
 
@@ -38,8 +38,8 @@ class StyleImageAPI(APIView):
     def delete(self, request):
         image_id = request.data.get('id')
         try:
-            image = Image.objects.get(id=image_id)
-        except Image.DoesNotExist:
+            image = StyleImage.objects.get(id=image_id)
+        except StyleImage.DoesNotExist:
             return self.error('图片不存在')
         
         delete_file(image.now_name, path=settings.STYLE_IMAGE_PATH)
@@ -63,7 +63,7 @@ class UploadStyleImageAPI(APIView):
         now_name = rand_str(length=16)
 
         save_file(file, now_name, path=settings.STYLE_IMAGE_PATH)
-        Image.objects.create(upload_name=upload_name, now_name=now_name, image_type=ImageTypeEnum.style_image)
+        StyleImage.objects.create(upload_name=upload_name, now_name=now_name, image_type=StyleImageTypeEnum.for_train)
         return self.success()
 
 
@@ -82,7 +82,7 @@ class UploadOriginImageAPI(APIView):
         now_name = rand_str(length=16)
 
         save_file(file, now_name, path=settings.ORIGINAL_IMAGE_PATH)
-        image = Image.objects.create(upload_name=upload_name, now_name=now_name, image_type=ImageTypeEnum.original_image)
+        image = UploadImage.objects.create(upload_name=upload_name, now_name=now_name)
         return self.success({'origin_image_path': 'original_image/' + image.now_name, 'name': image.now_name})
 
 
@@ -92,7 +92,7 @@ class ConvertImageAPI(APIView):
         data = request.data
         origin_image = data['origin_image']
         style_image_ids = data['style_images']
-        style_images = Image.objects.filter(image_type=ImageTypeEnum.style_image).\
+        style_images = StyleImage.objects.filter(image_type=StyleImageTypeEnum.for_train).\
             filter(reduce(or_, [Q(id=id) for id in style_image_ids])).values_list('now_name', flat=True)
         member = 1 / len(style_images)
         weight = {}
@@ -104,7 +104,7 @@ class ConvertImageAPI(APIView):
         except grpc._channel._Rendezvous:
             return self.error('Image conversion failed')
 
-        Image.objects.create(now_name=resp, image_type=ImageTypeEnum.generate_image)
+        GenerateImage.objects.create(now_name=resp)
         return self.success({'generate_image': 'generate_image/' + resp})
 
 

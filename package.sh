@@ -40,7 +40,7 @@ echo "------------build the style_migrate docker images------------"
 docker build -t ms_style_migrate ./style_migrate
 echo "------------finished------------"
 
-echo "------------build the style_migrate docker images------------"
+echo "------------build the anime_style docker images------------"
 docker build -t ms_anime_style ./anime_style
 echo "------------finished------------"
 

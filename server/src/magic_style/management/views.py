@@ -2,10 +2,10 @@ import psutil
 from django.conf import settings
 
 from account.models import User
-from images.models import Image
+from images.models import StyleImage
 from utils.api import APIView, check
 from utils.constants.account import UserTypeEnum
-from utils.constants.images import ImageTypeEnum
+from utils.constants.images import StyleImageTypeEnum
 
 
 class PlatformInfoAPI(APIView):
@@ -19,7 +19,7 @@ class PlatformInfoAPI(APIView):
 
         general_manager_count = User.object.filter(user_type=UserTypeEnum.general_manager).count()
         normal_user_count = User.object.filter(user_type=UserTypeEnum.normal_user).count()
-        style_image_count = Image.objects.filter(image_type=ImageTypeEnum.style_image).count()
+        style_image_count = StyleImage.objects.filter(image_type=StyleImageTypeEnum).count()
 
         data = {
             'cpu_usage': cpu_usage,
