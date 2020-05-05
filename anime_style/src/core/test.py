@@ -1,18 +1,18 @@
 import argparse
-from utils import *
+from core.utils import load_test_data, save_images, tf
 import os
 import time
 import numpy as np
-from net import generator
+from core.net import generator
+import settings
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CHECKPOINT_DIR = os.path.join(BASE_DIR, 'checkpoint/AnimeGAN_Hayao_lsgan_300_300_1_3_10')
+
 def parse_args():
     desc = "Tensorflow implementation of AnimeGAN"
     parser = argparse.ArgumentParser(description=desc)
 
-    parser.add_argument('--checkpoint_dir', type=str, default='checkpoint/'+'AnimeGAN_Shinkai_lsgan_300_300_1_3_10',
+    parser.add_argument('--checkpoint_dir', type=str, default='checkpoint',
                         help='Directory name to save the checkpoints')
     parser.add_argument('--test_image', type=str, default='dataset/test/real',
                         help='Directory name of test photos')
@@ -32,7 +32,9 @@ def stats_graph(graph):
     print('FLOPs: {}'.format(flops.total_float_ops))
 
 
-def convert_animal_style(image_path, save_path, img_size=[256,256], checkpoint_dir=CHECKPOINT_DIR):
+def convert_animal_style(image_path, save_path, img_size=[256, 256], checkpoint_dir=settings.CHECKPOINT_DIR):
+    print('########################333')
+    print(checkpoint_dir)
     # tf.reset_default_graph()
     # test_real = tf.placeholder(tf.float32, [1, 256, 256, 3], name='test')
     test_real = tf.placeholder(tf.float32, [1, None, None, 3], name='test')
@@ -62,6 +64,7 @@ def convert_animal_style(image_path, save_path, img_size=[256,256], checkpoint_d
         save_images(fake_img, save_path)
         end = time.time()
         print(f'test-time: {end-begin} s')
+
 
 if __name__ == '__main__':
     arg = parse_args()

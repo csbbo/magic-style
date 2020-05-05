@@ -147,4 +147,7 @@ GENERATE_IMAGE_PATH = os.path.join(RESOURCES_DIR, 'generate_image')
 OTHER_IMAGE_PATH = os.path.join(RESOURCES_DIR, 'other_image')
 DOWNLOAD_DIR = os.path.join(RESOURCES_DIR, 'download')
 
+IMAGES_PATH = os.path.join(RESOURCES_DIR, 'images')
+UPLOAD_IMAGE_PATH = os.path.join(IMAGES_PATH, 'upload')
+
 IMPORT_TEMP_FILE_PATH = os.path.join(RESOURCES_DIR, 'import')

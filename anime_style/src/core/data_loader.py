@@ -1,6 +1,6 @@
 import os
 import tensorflow as tf
-import cv2,random
+import cv2, random
 import numpy as np
 
 

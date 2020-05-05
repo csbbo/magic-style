@@ -1,5 +1,5 @@
 
-from ops import *
+from core.ops import *
 
 def D_net(x_init,ch, n_dis,sn, scope, reuse):
     channel = ch // 2

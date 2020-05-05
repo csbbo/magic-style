@@ -4,12 +4,13 @@ import tensorflow as tf
 import numpy as np
 import time
 import sys
+import settings
 
 VGG_MEAN = [103.939, 116.779, 123.68]
 
 
 class Vgg19:
-    def __init__(self, vgg19_npy_path='vgg19_weight/vgg19.npy'):
+    def __init__(self, vgg19_npy_path=settings.VGG19_NPY_PATH):
 
         if vgg19_npy_path is not None:
             self.data_dict = np.load(vgg19_npy_path, encoding='latin1', allow_pickle=True).item()

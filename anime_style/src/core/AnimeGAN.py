@@ -1,11 +1,11 @@
-from ops import *
-from utils import *
+from core.ops import *
+from core.utils import *
 from glob import glob
 import time
 import numpy as np
-from net import generator
-from net.discriminator import D_net
-from data_loader import ImageGenerator
+from core.net import generator
+from core.net.discriminator import D_net
+from core.data_loader import ImageGenerator
 
 class AnimeGAN(object) :
     def __init__(self, sess, args):

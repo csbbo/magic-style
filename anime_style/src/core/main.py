@@ -1,6 +1,6 @@
-from AnimeGAN import AnimeGAN
+from core.AnimeGAN import AnimeGAN
 import argparse
-from utils import *
+from core.utils import *
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 

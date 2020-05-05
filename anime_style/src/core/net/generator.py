@@ -1,4 +1,4 @@
-from ops import *
+from core.ops import *
 import tensorflow as tf
 
 

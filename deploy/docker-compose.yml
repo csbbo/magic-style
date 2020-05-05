@@ -22,11 +22,11 @@ services:
       - postgres
     volumes:
       - "./log/server:/web/log"
-      - "./style_image:/dev/resources/style_image"
-      - "./style_image_ready:/dev/resources/style_image_ready"
-      - "./original_image:/dev/resources/original_image"
-      - "./generate_image:/dev/resources/generate_image"
-      - "./other_image:/dev/resources/other_image"
+      - "./images/style_image:/dev/resources/style_image"
+      - "./images/style_image_ready:/dev/resources/style_image_ready"
+      - "./images/original_image:/dev/resources/original_image"
+      - "./images/generate_image:/dev/resources/generate_image"
+      - "./images/other_image:/dev/resources/other_image"
       - "./download:/dev/resources/download"
     healthcheck:
       test: "curl -fs http://127.0.0.1:8000/api/CSRFTokenAPI || exit 1"
@@ -44,10 +44,10 @@ services:
       - server
     volumes:
       - "./log/openresty:/web/nginx/logs"
-      - "./style_image:/dev/resources/style_image"
-      - "./style_image_ready:/dev/resources/style_image_ready"
-      - "./original_image:/dev/resources/original_image"
-      - "./generate_image:/dev/resources/generate_image"
+      - "./images/style_image:/dev/resources/style_image"
+      - "./images/style_image_ready:/dev/resources/style_image_ready"
+      - "./images/original_image:/dev/resources/original_image"
+      - "./images/generate_image:/dev/resources/generate_image"
       - "./other_image:/dev/resources/other_image"
   style_migrate:
     image: ms_style_migrate:latest
@@ -56,13 +56,13 @@ services:
     # ports:
     #  - 1600:1600
     volumes:
-      - "./style_image:/dev/resources/style_image"
-      - "./original_image:/dev/resources/original_image"
-      - "./generate_image:/dev/resources/generate_image"
+      - "./images/style_image:/dev/resources/style_image"
+      - "./images/original_image:/dev/resources/original_image"
+      - "./images/generate_image:/dev/resources/generate_image"
       - "./model:/dev/resources/model"
       - "./data:/dev/resources/data"
-      - "./vggnet:/dev/resources/vggnet"
-      - "./MSCOCO:/dev/resources/MSCOCO"
+      - "./migrate/vggnet:/dev/resources/vggnet"
+      - "./migrate/MSCOCO:/dev/resources/MSCOCO"
   anime_style:
     image: ms_anime_style:latest
     container_name: ms_anime_style
@@ -72,4 +72,6 @@ services:
     volumes:
       - "./images/upload_images:/dev/resources/images/upload_images"
       - "./images/generate_images:/dev/resources/images/generate_images"
+      - "./anime/checkpoint:/server/core/checkpoint"
+      - "./anime/vgg19:/server/core/vgg19"
 
