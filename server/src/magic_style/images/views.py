@@ -164,4 +164,4 @@ class AnimeImageAPI(APIView):
             return self.error('图片转换失败')
 
         GenerateImage.objects.create(now_name=image_name)
-        return self.success(resp.path)
+        return self.success({'path': image_name})

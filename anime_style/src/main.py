@@ -17,6 +17,7 @@ def rand_str(length=16):
     random_list = [random.choice("123456789abcdef") for i in range(length)]
     return "".join(random_list)
 
+
 class Servicer(anime_style_pb2_grpc.StyleMigrateServicer):
     def ConvertAnimeStyle(self, request, context):
         upload_name = request.image_name
@@ -24,6 +25,7 @@ class Servicer(anime_style_pb2_grpc.StyleMigrateServicer):
         image_save_path = os.path.join(settings.GENERATE_IMAGE_PATH, image_name)
         convert_animal_style(image_name=upload_name, save_path=image_save_path)
         return Image(image_name=image_name)
+
 
 def server():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=20))

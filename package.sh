@@ -40,13 +40,17 @@ echo "------------build the style_migrate docker images------------"
 docker build -t ms_style_migrate ./style_migrate
 echo "------------finished------------"
 
+echo "------------build the style_migrate docker images------------"
+docker build -t ms_anime_style ./anime_style
+echo "------------finished------------"
+
 echo "------------pull the postgres image------------"
 docker pull postgres:12.0
 echo "------------finished------------"
 
 
 echo "------------export and zip the images to deploy------------"
-docker save -o ./ms_server.tar postgres:12.0 ms_openresty:latest ms_server:latest ms_style_migrate:latest
+docker save -o ./ms_server.tar postgres:12.0 ms_openresty:latest ms_server:latest ms_style_migrate:latest ms_anime_style:latest
 gzip ms_server.tar
 cp ms_server.tar.gz ./magic_style
 rm ms_server.tar.gz
