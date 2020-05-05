@@ -3,5 +3,5 @@ message Image {
     string image_name = 1;
 }
 service AnimeStyle {
-    rpc ConvertAnimeStyle (Image) returns (Image) {}
+    rpc ConvertAnimeStyle(Image) returns (Image) {}
 }
