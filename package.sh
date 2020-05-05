@@ -80,5 +80,5 @@ echo "------------finished------------"
 echo "------------clean up package env------------"
 rm -rf ./openresty/dist
 rm -rf ./frontend/dist
-docker image rm ms_openresty:latest ms_server:latest ms_style_migrate:latest
+docker image rm ms_openresty:latest ms_server:latest ms_style_migrate:latest ms_anime_style:latest
 echo "------------finished------------"
