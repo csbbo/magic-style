@@ -19,7 +19,7 @@ class PlatformInfoAPI(APIView):
 
         general_manager_count = User.object.filter(user_type=UserTypeEnum.general_manager).count()
         normal_user_count = User.object.filter(user_type=UserTypeEnum.normal_user).count()
-        style_image_count = StyleImage.objects.filter(image_type=StyleImageTypeEnum).count()
+        style_image_count = StyleImage.objects.filter(image_type=StyleImageTypeEnum.trained).count()
 
         data = {
             'cpu_usage': cpu_usage,

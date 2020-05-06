@@ -103,7 +103,7 @@ export default {
       ajax.post("/api/UploadImageAPI", param, headers).then(resp => {
         if (resp.data.err === null) {
           loading.close();
-          this.originImagePath = resp.data.data.origin_image_path;
+          this.originImagePath = resp.data.data.path;
           this.originImageName = resp.data.data.name;
         }
       });
