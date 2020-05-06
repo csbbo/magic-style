@@ -21,7 +21,7 @@ class StyleImageAPI(APIView):
     def get(self, request):
         image_type = request.data['image_type']
         style_images = StyleImage.objects.filter(image_type=image_type)
-        return self.success(StyleImageSerializer(style_images, many=True).data)
+        return self.success(StyleImageSerializer(style_images, many=True, context={'image_type': image_type}).data)
 
     @check([UserTypeEnum.super_admin], serializer=UpdateStyleImageSerializer)
     def put(self, request):
@@ -152,10 +152,9 @@ class UploadImageAPI(APIView):
         save_file(file, now_name, path=settings.UPLOAD_IMAGE_PATH)
         image = UploadImage.objects.create(upload_name=upload_name, now_name=now_name)
         data = {
-            'id': image.id,
+            'id': str(image.id),
             'name': image.upload_name,
-            'path': f'upload_image/{image.now_name}',
-            'create_time': image.create_time
+            'path': f'upload_image/{image.now_name}'
         }
         return self.success(data)
 

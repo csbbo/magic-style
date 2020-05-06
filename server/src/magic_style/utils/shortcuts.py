@@ -31,7 +31,7 @@ def datetime_pretty(value=None, *, fmt="%Y-%m-%d %H:%M:%S %Z"):
     :param fmt: 返回时间格式
     :param value: 时间，如果是 None 就返回当前时间
     """
-    return timezone.localtime(value, timezone=settings.LOCAL_TIMEZONE).strftime(fmt)
+    return timezone.localtime(value, timezone=settings.TIME_ZONE).strftime(fmt)
 
 
 def rand_str(length=32, type="lower_hex"):

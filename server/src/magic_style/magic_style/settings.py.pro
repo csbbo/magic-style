@@ -141,11 +141,12 @@ SM_RPC_HOST_PORT = 'style_migrate:1600'
 AS_RPC_HOST_PORT = 'anime_style:1600'
 
 RESOURCES_DIR = os.path.abspath(os.path.join(BASE_DIR, '../dev/resources'))
+DOWNLOAD_DIR = os.path.join(RESOURCES_DIR, 'download')
 
 IMAGES_PATH = os.path.join(RESOURCES_DIR, 'images')
-UPLOAD_IMAGE_PATH = os.path.join(IMAGES_PATH, 'upload')
+UPLOAD_IMAGE_PATH = os.path.join(IMAGES_PATH, 'upload_image')
 GENERATE_IMAGE_PATH = os.path.join(IMAGES_PATH, 'generate_image')
 STYLE_IMAGE_PATH = os.path.join(IMAGES_PATH, 'style_image_trained')
-STYLE_IMAGE_FORTAIN_PATH = os.path.join(IMAGES_PATH, 'style_image_fortrain')
+STYLE_IMAGE_FORTRAIN_PATH = os.path.join(IMAGES_PATH, 'style_image_fortrain')
 
 IMPORT_TEMP_FILE_PATH = os.path.join(RESOURCES_DIR, 'import')

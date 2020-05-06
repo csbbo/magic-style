@@ -24,7 +24,7 @@ services:
       - "./log/server:/web/log"
       - "./images/style_image:/dev/resources/images/style_image"
       - "./images/style_image_fortrain:/dev/resources/images/style_image_fortrain"
-      - "./images/upload:/dev/resources/images/upload_image"
+      - "./images/upload_image:/dev/resources/images/upload_image"
       - "./images/generate_image:/dev/resources/images/generate_image"
       - "./images/other_image:/dev/resources/images/other_image"
       - "./download:/dev/resources/download"
@@ -46,7 +46,7 @@ services:
       - "./log/openresty:/web/nginx/logs"
       - "./images/style_image:/dev/resources/images/style_image"
       - "./images/style_image_fortrain:/dev/resources/images/style_image_fortrain"
-      - "./images/upload:/dev/resources/images/upload_image"
+      - "./images/upload_image:/dev/resources/images/upload_image"
       - "./images/generate_image:/dev/resources/images/generate_image"
       - "./other_image:/dev/resources/other_image"
   style_migrate:
@@ -70,8 +70,8 @@ services:
     # ports:
     #  - 1600:1600
     volumes:
-      - "./images/upload_images:/dev/resources/images/upload_images"
-      - "./images/generate_images:/dev/resources/images/generate_images"
+      - "./images/upload_image:/dev/resources/images/upload_image"
+      - "./images/generate_images:/dev/resources/images/generate_image"
       - "./anime/checkpoint:/server/core/checkpoint"
       - "./anime/vgg19:/server/core/vgg19"
 
