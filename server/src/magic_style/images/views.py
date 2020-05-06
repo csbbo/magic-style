@@ -69,25 +69,6 @@ class UploadStyleImageAPI(APIView):
         return self.success()
 
 
-# class UploadOriginImageAPI(APIView):
-#     request_parsers = ()
-#
-#     @check([UserTypeEnum.super_admin])
-#     def post(self, request):
-#         upload_file_form = UploadFileForm(request.POST, request.FILES)
-#         if not upload_file_form.is_valid():
-#             return self.error(msg='文件上传失败')
-#
-#         file = request.FILES['file']
-#         upload_file_name = file.name
-#         upload_name = upload_file_name.split('.')[0]
-#         now_name = rand_str(length=16)
-#
-#         save_file(file, now_name, path=settings.ORIGINAL_IMAGE_PATH)
-#         image = UploadImage.objects.create(upload_name=upload_name, now_name=now_name)
-#         return self.success({'origin_image_path': 'original_image/' + image.now_name, 'name': image.now_name})
-
-
 class ConvertImageAPI(APIView):
     @check('__all__', serializer=ConvertImageSerializer)
     def post(self, request):
