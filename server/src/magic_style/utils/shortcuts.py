@@ -72,3 +72,9 @@ def save_file(file, filename, path=settings.DOWNLOAD_DIR):
 def delete_file(filename, path=settings.DOWNLOAD_DIR):
     file_path = os.path.join(path, filename)
     os.remove(file_path)
+
+
+def copy_file(from_filename, to_filename, from_path=settings.DOWNLOAD_DIR, to_path=settings.DOWNLOAD_DIR):
+    with open(os.path.join(to_path, to_filename), 'wb') as f:
+        with open(os.path.join(from_path, from_filename), 'rb') as fp:
+            f.write(fp.read())

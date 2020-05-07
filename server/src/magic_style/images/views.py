@@ -14,7 +14,7 @@ from utils.api import APIView, check
 from utils.constants.account import UserTypeEnum
 from utils.constants.images import StyleImageTypeEnum
 from utils.constants.rpc import TrainingModeTypeEnum
-from utils.shortcuts import rand_str, save_file, delete_file
+from utils.shortcuts import rand_str, save_file, delete_file, copy_file
 
 
 class StyleImageAPI(APIView):
@@ -98,15 +98,20 @@ class TrainingModeAPI(APIView):
         operation = request.data['operation']
 
         if operation == TrainingModeTypeEnum.start:
+            old_style_images = StyleImage.objects.filter(image_type=StyleImageTypeEnum.trained)
+            for image in old_style_images:
+                delete_file(image.now_name, path=settings.STYLE_IMAGE_PATH)
+            old_style_images.delete()
+
             for_train_images = StyleImage.objects.filter(image_type=StyleImageTypeEnum.for_train)
-            StyleImage.objects.filter(image_type=StyleImageTypeEnum.trained).delete()
+            bulk_create_list = []
             for image in for_train_images:
                 image_name = rand_str()
-                with open(os.path.join(settings.STYLE_IMAGE_PATH, image_name), 'wb') as f:
-                    with open(os.path.join(settings.STYLE_IMAGE_FORTRAIN_PATH, image.now_name), 'rb') as fp:
-                        f.write(fp.read())
-                StyleImage.objects.create(upload_name=image.upload_name, now_name=image_name,
-                                          image_type=StyleImageTypeEnum.trained)
+                copy_file(image.now_name, image_name, from_path=settings.STYLE_IMAGE_FORTRAIN_PATH,
+                          to_path=settings.STYLE_IMAGE_PATH)
+                bulk_create_list.append(StyleImage(upload_name=image.upload_name, now_name=image_name,
+                                                   image_type=StyleImageTypeEnum.trained))
+            StyleImage.objects.bulk_create(bulk_create_list)
 
         try:
             resp = rpc_interface.training_mode(operation)
