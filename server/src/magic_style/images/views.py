@@ -148,7 +148,7 @@ class UploadImageAPI(APIView):
 
 
 class AnimeImageAPI(APIView):
-    @check('__all__', serializer=ConvertImageSerializer)
+    @check('__all__')
     def post(self, request):
         data = request.data
         image_id = data['image_id']
