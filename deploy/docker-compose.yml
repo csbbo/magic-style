@@ -48,7 +48,7 @@ services:
       - "./images/style_image_fortrain:/dev/resources/images/style_image_fortrain"
       - "./images/upload_image:/dev/resources/images/upload_image"
       - "./images/generate_image:/dev/resources/images/generate_image"
-      - "./other_image:/dev/resources/other_image"
+      - "./images/other_image:/dev/resources/other_image"
   style_migrate:
     image: ms_style_migrate:latest
     container_name: ms_style_migrate
