@@ -1,4 +1,3 @@
-import os
 import logging
 from functools import reduce
 from operator import or_
@@ -18,6 +17,7 @@ from utils.constants.rpc import TrainingModeTypeEnum
 from utils.shortcuts import rand_str, save_file, delete_file, copy_file
 
 logger = logging.getLogger(__name__)
+
 
 class StyleImageAPI(APIView):
     @check([UserTypeEnum.super_admin], serializer=GetStyleImageSerializer)
