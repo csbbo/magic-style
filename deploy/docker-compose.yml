@@ -57,7 +57,7 @@ services:
     #  - 1600:1600
     volumes:
       - "./images/style_image:/dev/resources/images/style_image"
-      - "./images/original_image:/dev/resources/images/upload_image"
+      - "./images/upload_image:/dev/resources/images/upload_image"
       - "./images/generate_image:/dev/resources/images/generate_image"
       - "./model:/dev/resources/model"
       - "./data:/dev/resources/data"
@@ -71,7 +71,7 @@ services:
     #  - 1600:1600
     volumes:
       - "./images/upload_image:/dev/resources/images/upload_image"
-      - "./images/generate_images:/dev/resources/images/generate_image"
+      - "./images/generate_image:/dev/resources/images/generate_image"
       - "./anime/checkpoint:/server/core/checkpoint"
       - "./anime/vgg19:/server/core/vgg19"
 
