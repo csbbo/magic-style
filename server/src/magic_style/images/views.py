@@ -1,4 +1,5 @@
 import os
+import logging
 from functools import reduce
 from operator import or_
 
@@ -15,6 +16,7 @@ from utils.constants.account import UserTypeEnum
 from utils.constants.images import StyleImageTypeEnum
 from utils.shortcuts import rand_str, save_file, delete_file
 
+logger = logging.getLogger(__name__)
 
 class StyleImageAPI(APIView):
     @check([UserTypeEnum.super_admin], serializer=GetStyleImageSerializer)
@@ -95,7 +97,8 @@ class TrainingModeAPI(APIView):
     @check([UserTypeEnum.super_admin], serializer=TrainingModeSerializer)
     def post(self, request):
         operation = request.data['operation']
-
+        logger.error('do not known why excul ....')
+        logger.error('operation'+operation)
         for_train_images = StyleImage.objects.filter(image_type=StyleImageTypeEnum.for_train)
         StyleImage.objects.filter(image_type=StyleImageTypeEnum.trained).delete()
         for image in for_train_images:
