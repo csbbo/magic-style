@@ -1,4 +1,5 @@
 import os
+import logging
 from functools import reduce
 from operator import or_
 
@@ -16,6 +17,7 @@ from utils.constants.images import StyleImageTypeEnum
 from utils.constants.rpc import TrainingModeTypeEnum
 from utils.shortcuts import rand_str, save_file, delete_file, copy_file
 
+logger = logging.getLogger(__name__)
 
 class StyleImageAPI(APIView):
     @check([UserTypeEnum.super_admin], serializer=GetStyleImageSerializer)
@@ -96,7 +98,6 @@ class TrainingModeAPI(APIView):
     @check([UserTypeEnum.super_admin], serializer=TrainingModeSerializer)
     def post(self, request):
         operation = request.data['operation']
-
         if operation == TrainingModeTypeEnum.start:
             old_style_images = StyleImage.objects.filter(image_type=StyleImageTypeEnum.trained)
             for image in old_style_images:
@@ -112,7 +113,6 @@ class TrainingModeAPI(APIView):
                 bulk_create_list.append(StyleImage(upload_name=image.upload_name, now_name=image_name,
                                                    image_type=StyleImageTypeEnum.trained))
             StyleImage.objects.bulk_create(bulk_create_list)
-
         try:
             resp = rpc_interface.training_mode(operation)
         except grpc._channel._Rendezvous:
