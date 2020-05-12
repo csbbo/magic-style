@@ -11,5 +11,3 @@ IMAGES_PATH = os.path.join(RESOURCES_DIR, 'images')
 
 UPLOAD_IMAGE_PATH = os.path.join(IMAGES_PATH, 'upload_image')
 GENERATE_IMAGE_PATH = os.path.join(IMAGES_PATH, 'generate_image')
-
-
