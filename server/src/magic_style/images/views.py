@@ -78,13 +78,19 @@ class ConvertImageAPI(APIView):
         data = request.data
         origin_image = data['origin_image']
         style_image_ids = data['style_images']
+        if not UploadImage.objects.filter(now_name=origin_image).exists():
+            return self.error('图片不存在')
+
         style_images = StyleImage.objects.filter(image_type=StyleImageTypeEnum.trained).\
             filter(reduce(or_, [Q(id=id) for id in style_image_ids])).values_list('now_name', flat=True)
+
+        if len(style_images) < len(style_image_ids):
+            return self.error('图片不存在')
+            
         member = 1 / len(style_images)
         weight = {}
         for i in style_images:
             weight[i] = member
-        print(weight)
         try:
             resp = rpc_interface.convert_image(origin_image, weight)
         except grpc._channel._Rendezvous:
@@ -141,7 +147,7 @@ class UploadImageAPI(APIView):
         image = UploadImage.objects.create(upload_name=upload_name, now_name=now_name)
         data = {
             'id': str(image.id),
-            'name': image.upload_name,
+            'name': image.now_name,
             'path': f'upload_image/{image.now_name}'
         }
         return self.success(data)
