@@ -13,7 +13,7 @@ bash package.sh
 ## 部署
 将项目下打包好的安装包复制到要部署的文件夹
 ```.env
-cp magic_style_date.zip /path/to/deploy/
+cp magic_style_`date`.zip /path/to/deploy/
 ```
 
 解压安装包
@@ -21,7 +21,10 @@ cp magic_style_date.zip /path/to/deploy/
 uzip magic_style_date.zip
 ```
 
-下载vgg16模型到magic_style_date中
+下载含动漫风格迁移训练完成模型压缩包anime.zip,含风格迁移所需要的MSCOCO数据集和vgg16模型压缩包migrate.zip到magic_style_date文件夹中
+
+[anime.zip]() 密码:
+[migrate.zip]() 密码:
 ```.env
 cd magic_style_date
 unzip -P password magic_style_date.zip
